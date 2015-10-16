@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="345" height="500" horizontalAlign="left" verticalAlign="top" backgroundGradientColors="[#000000, #000000]" borderColor="#000000" themeColor="#000000"
+	creationComplete="initApp(event);" click="{application.setFocus();}" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+	<mx:Script source="oresim/oresim-const.as" />
+	<mx:Script source="oresim/oresim-main.as" />
+
+	<mx:SoundEffect id="lvupSe" useDuration="false" loops="0" source="@Embed('se/lvup.mp3')"/>
+	<mx:SoundEffect id="stupSe" useDuration="false" loops="0" source="@Embed('se/stup.mp3')"/>
+
+	<mx:Image x="0" y="0" source="@Embed('image/sim.png')"  width="345" height="282" id="mainPanel" autoLoad="true"/>
+	<mx:Image x="0" y="282" source="@Embed('image/frame.png')" width="345" height="218" autoLoad="true" click="{application.setFocus();}"/>
+	<mx:Image x="5" y="27" source="@Embed('image/c0.jpg')" id="charImg"  cacheAsBitmap="true" cachePolicy="on" autoLoad="true" scaleContent="true"/>
+	<mx:Button x="156" y="166" upSkin="@Embed('image/dsp-off.swf')" overSkin="@Embed('image/dsp-off.swf')" downSkin="@Embed('image/dsp-on.swf')" width="12" height="12" id="s0dup" click="{stdupPress(0)}"/>
+	<mx:TextArea x="4" y="319" width="337" height="170" backgroundColor="#282470" borderColor="#7080c8" id="logarea" color="#ffffff" fontFamily="ＭＳ ゴシック" focusIn="{focusLogarea = true;}" focusOut="{focusLogarea = false;}"/>
+	<mx:ComboBox x="95" y="53" fillColors="[#363636, #363636]" borderColor="#363636" width="120" height="22" enabled="true" id="styleCB" alternatingItemColors="[#363636,#363636,#363636]" dataProvider="{styleList}" fontFamily="ＭＳ ゴシック" color="#ffffff" fontWeight="normal" change="{changeStyle(styleCB.selectedIndex)}" fillAlphas="[1,1]" selectionColor="#C0C0C0" close="{application.setFocus();}" click="{styleCB.dropdown.setFocus();}"></mx:ComboBox>
+	<mx:ComboBox x="95" y="27" fillColors="[#363636, #363636]" borderColor="#363636" width="120" height="22" id="charCB" color="#FFFFFF" fontFamily="ＭＳ ゴシック" fontSize="10" alternatingItemColors="[#363636,#363636,#363636,#363636,#363636,#363636,#363636,#363636,#363636,#363636,#363636,#363636,#363636]" fontWeight="normal" alpha="1.0" fillAlphas="[1,1]" selectionColor="#808080" change="{changeChar(charCB.selectedIndex)}" close="{application.setFocus();}" enabled="true" dataProvider="{charList}" includeInLayout="true" click="{charCB.dropdown.setFocus();}"></mx:ComboBox>
+	<mx:ComboBox x="95" y="79" fillColors="[#363636, #363636]" borderColor="#363636" width="120" height="22" enabled="true" id="xienCB" dataProvider="{xienList}" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="10" fontWeight="normal" change="{changeXien(xienCB.selectedItem.data)}" fillAlphas="[1,1]" selectionColor="#C0C0C0" open="{openDrop()}" rowCount="19" close="{application.setFocus();}" click="{xienCB.dropdown.setFocus();}"></mx:ComboBox>
+	<mx:NumericStepper y="110" minimum="0" maximum="100" stepSize="5" enabled="true" value="50" backgroundColor="#6860A8" borderColor="0" borderStyle="solid" color="#ffffff" fontSize="12" textAlign="center" fontFamily="ＭＳ ゴシック" x="142" id="bonusNS" cornerRadius="6" dropShadowColor="#363636"/>
+	<mx:TextInput x="142" y="110" width="44" backgroundColor="#6860A8" borderColor="#000000" height="22" borderStyle="solid" editable="false" text="{bonusNS.value}%" textAlign="center" id="bonusTXT" maxChars="4" color="#ffffff" fontFamily="ＭＳ ゴシック" fontSize="14"/>
+	<mx:Text x="48" y="165" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s0" enabled="true" textAlign="right" width="30" selectable="false" text="255"/>
+	<mx:Text x="48" y="180" text="255" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s1" enabled="true" textAlign="right" width="30" selectable="false"/>
+	<mx:Text x="48" y="195" text="255" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s2" enabled="true" textAlign="right" width="30" selectable="false"/>
+	<mx:Text x="48" y="210" text="255" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s3" enabled="true" textAlign="right" width="30" selectable="false"/>
+	<mx:Text x="48" y="225" text="255" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s4" enabled="true" textAlign="right" width="30" selectable="false"/>
+	<mx:Text x="48" y="240" text="255" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s5" enabled="true" textAlign="right" width="30" selectable="false"/>
+	<mx:Text x="48" y="255" text="255" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s6" enabled="true" textAlign="right" width="30" selectable="false"/>
+	<mx:Text x="220" y="164" text="20000" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s7" enabled="true" textAlign="right" width="39" selectable="false" height="16"/>
+	<mx:Text x="229" y="180" text="5000" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s8" enabled="true" textAlign="right" width="30" selectable="false" height="16"/>
+	<mx:Text x="220" y="195" text="9999" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s9" enabled="true" textAlign="right" width="39" selectable="false" height="16"/>
+	<mx:Text x="83" y="165" text="25" fontFamily="ＭＳ ゴシック" color="#66cc66" fontSize="12" id="s0L" enabled="true" textAlign="left" width="30" selectable="false"/>
+	<mx:Text x="83" y="180" text="25" fontFamily="ＭＳ ゴシック" color="#66cc66" fontSize="12" id="s1L" enabled="true" textAlign="left" width="30" selectable="false"/>
+	<mx:Text x="83" y="195" text="25" fontFamily="ＭＳ ゴシック" color="#66cc66" fontSize="12" id="s2L" enabled="true" textAlign="left" width="30" selectable="false"/>
+	<mx:Text x="83" y="210" text="25" fontFamily="ＭＳ ゴシック" color="#66cc66" fontSize="12" id="s3L" enabled="true" textAlign="left" width="30" selectable="false"/>
+	<mx:Text x="83" y="225" text="25" fontFamily="ＭＳ ゴシック" color="#66cc66" fontSize="12" id="s4L" enabled="true" textAlign="left" width="30" selectable="false"/>
+	<mx:Text x="83" y="240" text="25" fontFamily="ＭＳ ゴシック" color="#66cc66" fontSize="12" id="s5L" enabled="true" textAlign="left" width="30" selectable="false"/>
+	<mx:Text x="83" y="255" text="25" fontFamily="ＭＳ ゴシック" color="#66cc66" fontSize="12" id="s6L" enabled="true" textAlign="left" width="30" selectable="false"/>
+	<mx:Text x="132" y="165" text=" 13" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="p0" enabled="true" width="26" selectable="false" textAlign="right"/>
+	<mx:Text x="132" y="180" text=" 13" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="p1" enabled="true" width="26" selectable="false" textAlign="right"/>
+	<mx:Text x="132" y="195" text=" 13" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="p2" enabled="true" width="26" selectable="false" textAlign="right"/>
+	<mx:Text x="132" y="210" text=" 13" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="p3" enabled="true" width="26" selectable="false" textAlign="right"/>
+	<mx:Text x="132" y="225" text=" 13" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="p4" enabled="true" width="26" selectable="false" textAlign="right"/>
+	<mx:Text x="132" y="240" text=" 13" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="p5" enabled="true" width="26" selectable="false" textAlign="right"/>
+	<mx:Text x="132" y="255" text=" 13" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="p6" enabled="true" width="26" selectable="false" textAlign="right"/>
+	<mx:Text x="265" y="166" text="20000" fontFamily="ＭＳ ゴシック" color="#66ffff" fontSize="8" id="s7mi" enabled="true" textAlign="right" width="27" selectable="false"/>
+	<mx:Text x="302" y="166" text="20000" fontFamily="ＭＳ ゴシック" color="#ff9933" fontSize="8" id="s7mx" enabled="true" textAlign="right" width="27" selectable="false"/>
+	<mx:Text x="265" y="180" text="5000" fontFamily="ＭＳ ゴシック" color="#66ffff" fontSize="10" id="s8mi" enabled="true" textAlign="right" width="27" selectable="false"/>
+	<mx:Text x="265" y="195" text="9999" fontFamily="ＭＳ ゴシック" color="#66ffff" fontSize="8" id="s9mi" enabled="true" textAlign="right" width="27" selectable="false"/>
+	<mx:Text x="302" y="180" text="5000" fontFamily="ＭＳ ゴシック" color="#ff9933" fontSize="10" id="s8mx" enabled="true" textAlign="right" width="27" selectable="false"/>
+	<mx:Text x="302" y="195" text="9999" fontFamily="ＭＳ ゴシック" color="#ff9933" fontSize="8" id="s9mx" enabled="true" textAlign="right" width="27" selectable="false"/>
+	<mx:Text x="250" y="36" text="255" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="lv" enabled="true" textAlign="center" width="30" height="16"/>
+	<mx:Button x="116" y="166" upSkin="@Embed('image/stup-off.swf')" width="12" height="12" downSkin="@Embed('image/stup-on.swf')" overSkin="@Embed('image/stup-off.swf')" id="s0up" click="{stupPress(0)}"/>
+	<mx:Button x="116" y="256" upSkin="@Embed('image/stup-off.swf')" width="12" height="12" downSkin="@Embed('image/stup-on.swf')" overSkin="@Embed('image/stup-off.swf')" id="s6up" click="{stupPress(6)}"/>
+	<mx:Button x="116" y="196" upSkin="@Embed('image/stup-off.swf')" width="12" height="12" downSkin="@Embed('image/stup-on.swf')" overSkin="@Embed('image/stup-off.swf')" id="s2up" click="{stupPress(2)}"/>
+	<mx:Button x="116" y="211" upSkin="@Embed('image/stup-off.swf')" width="12" height="12" downSkin="@Embed('image/stup-on.swf')" overSkin="@Embed('image/stup-off.swf')" id="s3up" click="{stupPress(3)}"/>
+	<mx:Button x="116" y="181" upSkin="@Embed('image/stup-off.swf')" width="12" height="12" downSkin="@Embed('image/stup-on.swf')" overSkin="@Embed('image/stup-off.swf')" id="s1up" click="{stupPress(1)}"/>
+	<mx:Button x="116" y="226" upSkin="@Embed('image/stup-off.swf')" width="12" height="12" downSkin="@Embed('image/stup-on.swf')" overSkin="@Embed('image/stup-off.swf')" id="s4up" click="{stupPress(4)}"/>
+	<mx:Button x="116" y="241" upSkin="@Embed('image/stup-off.swf')" width="12" height="12" downSkin="@Embed('image/stup-on.swf')" overSkin="@Embed('image/stup-off.swf')" id="s5up" click="{stupPress(5)}"/>
+	<mx:Button x="296" y="36" upSkin="@Embed('image/lvup-off.png')" overSkin="@Embed('image/lvup-off.png')" downSkin="@Embed('image/lvup-on.png')" toolTip="レベルアップ" click="{lvupPress()}"/>
+	<mx:HSlider x="244" y="58" width="90" maximum="100" minimum="0" liveDragging="true" value="50" enabled="true" allowTrackClick="true" id="volume" change="{changeVolume(volume.value)}">
+	</mx:HSlider>
+	<mx:Label x="220" y="60" text="Vol." fontFamily="Arial" color="#ffffff" fontWeight="bold"/>
+	<mx:Button x="220" y="83" upSkin="@Embed('image/goback_off.png')" width="19" height="19" overSkin="@Embed('image/goback_off.png')" downSkin="@Embed('image/goback_on.png')" toolTip="戻る" click="{backPress()}"/>
+	<mx:Button x="246" y="83" upSkin="@Embed('image/progress_off.png')" width="19" height="19" overSkin="@Embed('image/progress_off.png')" downSkin="@Embed('image/progress_on.PNG')" toolTip="進む" click="{progressPress()}"/>
+	<mx:Button x="279" y="82" label="Reset" color="#000080" width="52" fontSize="10" fontFamily="Arial" toolTip="ステータス初期化" click="{resetPress()}" borderColor="#363636" fillColors="[#ffffff, #6d6dc0]" fontWeight="normal" fillAlphas="[1,1]" textRollOverColor="#585B35" labelPlacement="bottom"/>
+	<mx:Button x="220" y="110" label="指南書出力" color="#000080" width="112" fontFamily="ＭＳ ゴシック" fontSize="12" fontWeight="bold" click="{guidePress()}" borderColor="#363636" fillColors="[#ffffff, #6466ca]" fillAlphas="[1,1]" textRollOverColor="#585B35" labelPlacement="bottom"/>
+	<mx:Button x="156" y="196" upSkin="@Embed('image/dsp-off.swf')" overSkin="@Embed('image/dsp-off.swf')" downSkin="@Embed('image/dsp-on.swf')" width="12" height="12" id="s2dup" click="{stdupPress(2)}"/>
+	<mx:Button x="156" y="181" upSkin="@Embed('image/dsp-off.swf')" overSkin="@Embed('image/dsp-off.swf')" downSkin="@Embed('image/dsp-on.swf')" width="12" height="12" id="s1dup" click="{stdupPress(1)}"/>
+	<mx:Button x="156" y="211" upSkin="@Embed('image/dsp-off.swf')" overSkin="@Embed('image/dsp-off.swf')" downSkin="@Embed('image/dsp-on.swf')" width="12" height="12" id="s3dup" click="{stdupPress(3)}"/>
+	<mx:Button x="156" y="226" upSkin="@Embed('image/dsp-off.swf')" overSkin="@Embed('image/dsp-off.swf')" downSkin="@Embed('image/dsp-on.swf')" width="12" height="12" id="s4dup" click="{stdupPress(4)}"/>
+	<mx:Button x="156" y="241" upSkin="@Embed('image/dsp-off.swf')" overSkin="@Embed('image/dsp-off.swf')" downSkin="@Embed('image/dsp-on.swf')" width="12" height="12" id="s5dup" click="{stdupPress(5)}"/>
+	<mx:Button x="156" y="256" upSkin="@Embed('image/dsp-off.swf')" overSkin="@Embed('image/dsp-off.swf')" downSkin="@Embed('image/dsp-on.swf')" width="12" height="12" id="s6dup" click="{stdupPress(6)}"/>
+	<mx:Button id="pasteB" x="206" y="298" downSkin="@Embed('image/paste_on.png')" width="19" height="19" overSkin="@Embed('image/paste_off.png')" upSkin="@Embed('image/paste_off.png')" toolTip="貼り付け" click="{pastePress()}"/>
+	<mx:Button x="233" y="298" downSkin="@Embed('image/load_on.png')" width="19" height="19" overSkin="@Embed('image/load_off.png')" upSkin="@Embed('image/load_off.png')" toolTip="ログ読込" click="{logLoadPress()}"/>
+	<mx:Button x="259" y="298" downSkin="@Embed('image/copy_on.png')" width="19" height="19" overSkin="@Embed('image/copy_off.png')" upSkin="@Embed('image/copy_off.png')" toolTip="コピー" click="{copyPress()}"/>
+	<mx:Button x="286" y="298" downSkin="@Embed('image/clear_on.png')" width="19" height="19" overSkin="@Embed('image/clear_off.png')" upSkin="@Embed('image/clear_off.png')" toolTip="クリア" click="{clearPress()}"/>
+	<mx:Text x="229" y="240" text="9999" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="s11" enabled="true" textAlign="right" width="30" selectable="false"/>
+	<mx:Label x="188" y="257" text="Bonus" color="#ffffff" fontFamily="ＭＳ ゴシック"/>
+	<mx:Text x="218" y="257" text="  0" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="tbonus" enabled="true" textAlign="right" width="24" height="16" selectable="false"/>
+	<mx:Text x="255" y="257" text="  0" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="tlvup" enabled="true" textAlign="right" width="24" height="16" selectable="false"/>
+	<mx:Text x="294" y="257" text="0%" fontFamily="ＭＳ ゴシック" color="#ffffff" fontSize="12" id="pbonus" enabled="true" textAlign="right" width="42" height="16" selectable="false" visible="true" fontWeight="normal"/>
+	<mx:Label x="244" y="257" text="/" color="#ffffff" fontFamily="ＭＳ ゴシック" selectable="false"/>
+	<mx:Label x="282" y="257" text="=" color="#ffffff" fontFamily="ＭＳ ゴシック" selectable="false"/>
+	<mx:Label x="290" y="165" text="～" color="#ffffff" fontFamily="ＭＳ ゴシック" selectable="false"/>
+	<mx:Label x="290" y="180" text="～" color="#ffffff" fontFamily="ＭＳ ゴシック" selectable="false"/>
+	<mx:Label x="290" y="195" text="～" color="#ffffff" fontFamily="ＭＳ ゴシック" selectable="false"/>
+	<mx:Label x="97" y="112" text="Bonus" color="#ffffff" fontFamily="Arial" fontSize="12"/>
+	<mx:Label x="10" y="460" text="Copyright (c) Softmax Co.,Ltd." fontSize="8" color="#2d3984" alpha="1.0" fontWeight="normal" fontFamily="Verdana" height="16"/>
+	<mx:Label x="10" y="472" text="Copyright (c) Nexon Corporation and Nexon Japan Co.,Ltd." fontSize="8" color="#2d3984" alpha="1.0" fontWeight="normal" fontFamily="Verdana" height="16"/>
+	<mx:Label x="10" y="448" text="Talesweaver is trademark of Softmax Co., Ltd." fontSize="8" color="#2d3984" alpha="1.0" fontWeight="normal" fontFamily="Verdana"/>
+	<mx:Label x="179" y="141" text="Programmed by Rugusaba-bou-maxi" fontSize="8" color="#354ba4" alpha="1.0" fontWeight="normal" fontFamily="Verdana"/>
+	<mx:TitleWindow y="52" width="345" height="444" layout="absolute" x="0" title="俺流再振りシミュレーター ステータス編集" id="w" borderColor="#808080" alpha="1.0" backgroundColor="#363636" color="#ffffff" fontFamily="ＭＳ ゴシック" fontWeight="normal" fontSize="12" showCloseButton="true"
+		 visible="false" close="{closeStatusEdit()}" horizontalScrollPolicy="off">
+		<mx:NumericStepper x="80" y="12" id="ss0" minimum="1" maximum="255" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="255"/>
+		<mx:Label x="16" y="12" text="STAB" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="80" y="42" id="ss1" minimum="1" maximum="255" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="255"/>
+		<mx:Label x="16" y="42" text="HACK" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="80" y="72" id="ss2" minimum="1" maximum="255" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="255"/>
+		<mx:Label x="16" y="72" text="INT" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="80" y="102" id="ss3" minimum="1" maximum="255" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="255"/>
+		<mx:Label x="16" y="102" text="DEF" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="80" y="132" id="ss4" minimum="1" maximum="255" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="255"/>
+		<mx:Label x="16" y="132" text="MR" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="80" y="162" id="ss5" minimum="1" maximum="255" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="255"/>
+		<mx:Label x="16" y="162" text="DEX" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="80" y="192" id="ss6" minimum="1" maximum="255" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="255"/>
+		<mx:Label x="16" y="192" text="AGI" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="240" y="42" id="ss7" minimum="1" maximum="22000" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="20000"/>
+		<mx:Label x="168" y="42" text="HP" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="240" y="72" id="ss8" minimum="1" maximum="7000" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="5000"/>
+		<mx:Label x="168" y="72" text="MP" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="240" y="102" id="ss9" minimum="1" maximum="12000" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="9999"/>
+		<mx:Label x="168" y="102" text="SP" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="240" y="192" id="ss11" minimum="1" maximum="9999" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="9999"/>
+		<mx:Label x="168" y="192" text="POINT" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:NumericStepper x="240" y="12" id="slv" minimum="1" maximum="255" stepSize="1" enabled="true" backgroundColor="#404040" borderStyle="solid" borderColor="#000000" textAlign="right" color="#ffffff" fontSize="14" fontFamily="ＭＳ ゴシック" cornerRadius="0" borderThickness="1" backgroundAlpha="1.0" width="64" height="20" value="255"/>
+		<mx:Label x="168" y="12" text="LV" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:DataGrid x="80" y="224" width="224" columnWidth="100" height="138" enabled="true" dataProvider="{sxiList}" editable="true" showHeaders="false" backgroundColor="#585858" dropShadowColor="#585858" alternatingItemColors="[#585858, #585858]" borderColor="#000000" borderThickness="1" id="sxi" color="#ffffff" fontFamily="ＭＳ ゴシック" fontSize="12" textSelectedColor="#FFFFFF" selectionColor="#585858" textRollOverColor="#000000" rollOverColor="#363636" themeColor="#363636" sortableColumns="false" resizableColumns="false" allowMultipleSelection="false" selectable="false" dropEnabled="false" dragEnabled="false" dragMoveEnabled="false" draggableColumns="false" allowDragSelection="false">
+			<mx:columns>
+				<mx:DataGridColumn headerText="系統" dataField="xienLabel" editable="false" id="xienLabel"/>
+				<mx:DataGridColumn headerText="Xien" dataField="xienData" editable="true" id="xienData" width="48"/>
+			</mx:columns>
+		</mx:DataGrid>
+		<mx:Label x="16" y="224" text="XIEN" fontFamily="Arial" fontSize="14" color="#ffffff" width="64" textAlign="left" height="20"/>
+		<mx:Button x="120" y="372" label="適用" width="96" height="22" fontFamily="ＭＳ ゴシック" borderColor="#000000" fillColors="[#363636, #363636]" color="#ffffff" fontWeight="normal" themeColor="#585b35" id="commitB" click="{commitStatusEditPress()}"/>
+	</mx:TitleWindow>
+</mx:Application>
